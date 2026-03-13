@@ -6,15 +6,39 @@ This project is a Python command-line tool that interacts with the Canvas API. I
 
 ## Demo
 
-![Demo](assets/demo.gif)
+![Demo](assets/CS408MiniLabDemo.gif)
 
-## Setup Instructions
+# Setup Instructions
 
 1. Clone this repository.
-2. Create and activate a Python virtual environment.
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
+
+2. Create a `.env` file in the project root containing your Canvas API token:
+CANVAS_API_TOKEN=your_canvas_token_here
+CANVAS_BASE_URL=https://boisestatecanvas.instructure.com
+
+3. Run the setup script.
+
+From PowerShell in the project directory:
+
+```powershell
+.\setup.ps1
+```
+
+OR
+
+From Command Line in the project directory:
+```bash
+.\setup.sh
+```
+
+The setup script will automatically:
+
+- create the Python virtual environment if it does not exist
+- activate the virtual environment
+- install required dependencies
+- verify that your .env file exists
+
+After the script finishes, you can run the CLI commands in the same terminal.
 
 ## Usage Examples
 List all active courses:
@@ -32,4 +56,8 @@ GET /api/v1/courses
 GET /api/v1/courses/:course_id/assignments
 
 ## Reflection
-One challenge in this project was filtering Canvas course results so that old or irrelevant courses did not dominate the output. Another important part was handling pagination, since Canvas can return results across multiple pages. I also focused on formatting the output cleanly so that the tool is more usable from the terminal than raw JSON would be.
+One challenge in this project was filtering Canvas course results so that old or irrelevant courses did not dominate the output. Canvas returns a large number of courses tied to an account, including past courses, student groups, and organizational shells. To solve this, the program filters courses based on activity dates and removes entries that clearly are not actual classes.
+
+Another important part of the project was handling pagination. The Canvas API often returns results across multiple pages, so the program follows pagination links until all results are retrieved. This ensures that the CLI tool returns complete data instead of just the first page.
+
+Finally, formatting the output into readable terminal tables significantly improves usability compared to printing raw JSON data, making the tool easier to use from the command line.
